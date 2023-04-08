@@ -1,27 +1,25 @@
 {% set name = "iscd-advection" %}
-{% set version = "0.0.0rc0" %}
+{% set version = "1.0.0" %}
 
 package:
   name: {{ name }}
   version: {{ version }}
 
 source:
-  # there are no tagged releases which so using archives of specific commits
-  url: https://github.com/ISCDtoolbox/Advection/archive/18cb6ac03efb26bd7e99981eff0c4c94b38a6c00.zip
-  sha256: aeb959f455495e6919897fa80afa8e0c1fdddcde83a3a38bc0efb4de2916da8d
+  url: https://github.com/ISCDtoolbox/Advection/archive/refs/tags/v{{ version }}.zip
+  sha256: 5c5c6e033faa0b26a413457358577055218b66b4a326aac3b90baf7dbf766062
+  patches:
+    - CMakeLists.patch
 
 build:
   number: 0
   skip: true  # [py2k or win] # Cannot open include file: 'pthread.h': No such file or directory
-  ignore_run_exports_from:
-    - {{ compiler('cxx') }}
   run_exports:
-    - iscd-advection {{ version }}
+    - {{ pin_subpackage('iscd-advection', max_pin='x.x.x') }}
 
 requirements:
   build:
     - {{ compiler('c') }}
-    - {{ compiler('cxx') }}
   host:
     - cmake
     - make  # [not win]
